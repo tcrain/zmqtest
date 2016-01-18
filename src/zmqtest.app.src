@@ -1,0 +1,12 @@
+{application, zmqtest,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { zmqtest_app, []}},
+  {env, []}
+ ]}.
