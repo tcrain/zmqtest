@@ -65,10 +65,11 @@ handle_call({add_dc, DCID, Publishers}, _From, State) ->
     %% Create a subscriber socket for the specified DC
     Socket = zmq_utils:create_connect_socket(sub, true, Address),
     %% For each partition in the current node:
-    lists:foreach(fun(P) ->
-      %% Make the socket subscribe to messages prefixed with the given partition number
-      ok = zmq_utils:sub_filter(Socket, inter_dc_txn:partition_to_bin(P))
-    end, dc_utilities:get_my_partitions()),
+    %% lists:foreach(fun(P) ->
+    %%   %% Make the socket subscribe to messages prefixed with the given partition number
+    %%   ok = zmq_utils:sub_filter(Socket, inter_dc_txn:partition_to_bin(P))
+    %% end, dc_utilities:get_my_partitions()),
+    ok = zmq_utils:sub_filter(Socket, <<>>),
     Socket
   end,
   Sockets = lists:map(F, Publishers),
@@ -84,9 +85,10 @@ handle_call({del_dc, DCID}, _From, State) ->
 %% handle an incoming interDC transaction from a remote node.
 handle_info({zmq, _Socket, BinaryMsg, _Flags}, State) ->
   %% decode the message
-  Msg = inter_dc_txn:from_bin(BinaryMsg),
+  io:format("Got ~p~n", [binary_to_list(BinaryMsg)]),
+  %% Msg = inter_dc_txn:from_bin(BinaryMsg),
   %% deliver the message to an appropriate vnode
-  ok = inter_dc_sub_vnode:deliver_txn(Msg),
+  %% ok = inter_dc_sub_vnode:deliver_txn(Msg),
   {noreply, State}.
 
 handle_cast(_Request, State) -> {noreply, State}.

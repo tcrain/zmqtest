@@ -26,5 +26,5 @@ init([]) ->
     ZMQContextManager = ?CHILD(zmq_context, worker, []),
     InterDcPub = ?CHILD(inter_dc_pub, worker, []),
     InterDcSub = ?CHILD(inter_dc_sub, worker, []),
-    {ok, { {one_for_one, 5, 10}, [InterDcPub, InterDcSub, ZMQContextManager]} }.
+    {ok, { {one_for_one, 5, 10}, [ZMQContextManager, InterDcPub, InterDcSub]} }.
 
