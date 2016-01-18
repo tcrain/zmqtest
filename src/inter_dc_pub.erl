@@ -23,8 +23,8 @@
 
 -module(inter_dc_pub).
 -behaviour(gen_server).
--include("antidote.hrl").
--include("inter_dc_repl.hrl").
+%% -include("antidote.hrl").
+%% -include("inter_dc_repl.hrl").
 
 %% API
 -export([
@@ -46,17 +46,15 @@
 
 %%%% API --------------------------------------------------------------------+
 
--spec get_address() -> socket_address().
 get_address() ->
   %% TODO check if we do not return a link-local address
   {ok, List} = inet:getif(),
   {Ip, _, _} = hd(List),
-  {ok, Port} = application:get_env(antidote, pubsub_port),
+  {ok, Port} = {ok, 8008},
   {Ip, Port}.
 
--spec broadcast(#interdc_txn{}) -> ok.
-broadcast(Txn) ->
-  case catch gen_server:call(?MODULE, {publish, inter_dc_txn:to_bin(Txn)}) of
+broadcast(_Txn) ->
+  case catch gen_server:call(?MODULE, {publish}) of
     {'EXIT', _Reason} -> lager:warning("Failed to broadcast a transaction."); %% this can happen if a node is shutting down.
     Normal -> Normal
   end.

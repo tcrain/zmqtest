@@ -23,8 +23,8 @@
 
 -module(inter_dc_sub).
 -behaviour(gen_server).
--include("antidote.hrl").
--include("inter_dc_repl.hrl").
+%% -include("antidote.hrl").
+%% -include("inter_dc_repl.hrl").
 
 %% API
 -export([
@@ -51,10 +51,8 @@
 %%%% API --------------------------------------------------------------------+
 
 %% TODO: persist added DCs in case of a node failure, reconnect on node restart.
--spec add_dc(dcid(), [socket_address()]) -> ok.
 add_dc(DCID, Publishers) -> gen_server:call(?MODULE, {add_dc, DCID, Publishers}).
 
--spec del_dc(dcid()) -> ok.
 del_dc(DCID) -> gen_server:call(?MODULE, {del_dc, DCID}).
 
 %%%% Server methods ---------------------------------------------------------+
